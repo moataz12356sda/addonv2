@@ -23,24 +23,24 @@ broker_address = "192.168.0.128"
 broker_port = 1883
 responsePacket = ''
 response2 = ''
-INTERNAL_DATABASE_NAME = "skarpt"
-INTERNAL_BACKUP_DATABASE_NAME = "Hold"
-USERNAME_DATABASE = "skarpt"
-PASSWORD_DATABASE = "skarpt"
-DATABASE_IP = '192.168.0.128'
-measurement = "Tzone"
-DATABASE_PORT = 8086
+# INTERNAL_DATABASE_NAME = "skarpt"
+# INTERNAL_BACKUP_DATABASE_NAME = "Hold"
+# USERNAME_DATABASE = "skarpt"
+# PASSWORD_DATABASE = "skarpt"
+# DATABASE_IP = '192.168.0.128'
+# measurement = "Tzone"
+# DATABASE_PORT = 8086
 
 
-# with open('/data/options.json', 'r') as config_file:    config = json.load(config_file)
-# DATABASE_PORT = config.get('database_port', '8086')  # Default to '8086' if not set
-# USERNAME_DATABASE = config.get('username_database', 'default_username')
-# PASSWORD_DATABASE = config.get('password_database', 'default_password')
-# INTERNAL_BACKUP_DATABASE_NAME = config.get('internal_backup_database_name', 'default_backup_db')
-# INTERNAL_DATABASE_NAME = config.get('internal_database_name', 'default_internal_db')
-# DATABASE_IP = config.get('database_ip', '127.0.0.1')
-# measurement = config.get('measurement', 'default_measurement')
-# port = config.get('port', '2000')
+with open('/data/options.json', 'r') as config_file:    config = json.load(config_file)
+DATABASE_PORT = config.get('database_port', '8086')  # Default to '8086' if not set
+USERNAME_DATABASE = config.get('username_database', 'default_username')
+PASSWORD_DATABASE = config.get('password_database', 'default_password')
+INTERNAL_BACKUP_DATABASE_NAME = config.get('internal_backup_database_name', 'default_backup_db')
+INTERNAL_DATABASE_NAME = config.get('internal_database_name', 'default_internal_db')
+DATABASE_IP = config.get('database_ip', '127.0.0.1')
+measurement = config.get('measurement', 'default_measurement')
+port = config.get('port', '2000')
 
 def ConvertKSA(packet):
     hour = packet[46:48]
@@ -158,6 +158,7 @@ def Update_ACK(Packetindex):
     now_utc = datetime.now()
     dt = now_utc.replace(year=now_utc.year - 4)
     response2 = "Server UTC time:" + str(dt)[:19]
+    print(response2)
     response2 = response2.encode('utf-8')
     response2 = response2.hex()
 
@@ -411,7 +412,7 @@ class EchoServer(asyncore.dispatcher):
         handler = EchoHandler(sock)
 
 
-server = EchoServer('', 2000)
+server = EchoServer('', port)
 asyncore.loop()
 
 
